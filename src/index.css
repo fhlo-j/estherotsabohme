@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 50% 98%;
+    --foreground: 222 47% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 6%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 6%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 45 93% 47%;
+    --accent-foreground: 222 47% 6%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+    --radius: 0.625rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-sky-50 text-navy font-sans antialiased;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .cloud-card {
+    @apply bg-white rounded-cloud shadow-cloud border border-white/65;
+  }
+  
+  .cloud-card-lg {
+    @apply bg-white rounded-cloud-lg shadow-cloud-lg border border-white/65;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-sky-500 to-sky-600 bg-clip-text text-transparent;
+  }
+  
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 bg-sky-500 text-white font-medium rounded-full 
+           transition-all duration-300 hover:bg-sky-600 hover:shadow-glow hover:scale-105
+           active:scale-95;
+  }
+  
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-8 py-4 bg-transparent text-navy font-medium rounded-full 
+           border-2 border-navy/20 transition-all duration-300 
+           hover:bg-navy hover:text-white hover:border-navy;
+  }
+  
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 xl:px-12;
+  }
+  
+  .heading-xl {
+    @apply text-[clamp(44px,5.2vw,78px)] leading-[0.95] tracking-tight font-serif font-semibold;
+  }
+  
+  .heading-lg {
+    @apply text-[clamp(34px,3.6vw,54px)] leading-[1.05] font-serif font-semibold;
+  }
+  
+  .heading-md {
+    @apply text-[clamp(22px,2.2vw,32px)] leading-[1.15] font-serif font-medium;
+  }
+  
+  .body-text {
+    @apply text-[clamp(15px,1.15vw,18px)] leading-[1.65] font-sans;
+  }
+  
+  .eyebrow {
+    @apply text-xs font-medium tracking-[0.12em] uppercase text-gray-500;
+  }
+}
+
+@layer utilities {
+  .cloud-mask {
+    clip-path: url(#cloud-clip);
+  }
+  
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F6FAFF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3B82F6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #0B0F19;
+}
