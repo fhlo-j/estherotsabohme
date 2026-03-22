@@ -110,29 +110,34 @@ export function PurchaseForm() {
       }
 
       // Submit to API
-      const response = await fetch('http://localhost:5000/api/orders/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders/create`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            city: formData.city,
+            bookFormat: formData.bookFormat,
+            quantity: Number(formData.quantity),
+            deliveryMethod:
+              formData.bookFormat === 'hardcopy'
+                ? formData.deliveryMethod
+                : null,
+            pickupLocation:
+              formData.bookFormat === 'hardcopy' &&
+              formData.deliveryMethod === 'pickup'
+                ? formData.pickupLocation
+                : null,
+          }),
         },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-          city: formData.city,
-          bookFormat: formData.bookFormat,
-          quantity: Number(formData.quantity),
-          deliveryMethod:
-            formData.bookFormat === 'hardcopy' ? formData.deliveryMethod : null,
-          pickupLocation:
-            formData.bookFormat === 'hardcopy' &&
-            formData.deliveryMethod === 'pickup'
-              ? formData.pickupLocation
-              : null,
-        }),
-      })
+      )
 
       const data = await response.json()
 

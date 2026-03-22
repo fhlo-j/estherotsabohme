@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react'
-import {
-  Mail,
-  Phone,
-  MapPin,
-  DollarSign,
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  Download,
-} from 'lucide-react'
+import { Mail, Phone, MapPin } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
@@ -28,13 +19,43 @@ const PAYMENT_STATUS_COLORS = {
   failed: 'bg-red-100 text-red-800',
 }
 
+type OrderStatus = keyof typeof STATUS_COLORS
+type PaymentStatus = keyof typeof PAYMENT_STATUS_COLORS
+
+interface Order {
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  address?: string
+  city?: string
+  bookFormat: 'ebook' | 'hardcopy'
+  quantity: number
+  deliveryMethod?: 'home-delivery' | 'pickup'
+  pickupLocation?: string
+  totalAmount: number
+  paymentStatus: PaymentStatus
+  orderStatus: OrderStatus
+  createdAt: string
+}
+
+interface Stats {
+  totalOrders: number
+  pendingPayment: number
+  confirmedPayment: number
+  ebookOrders: number
+  hardcopyOrders: number
+  totalRevenue: number
+}
+
 export function AdminDashboard() {
-  const [orders, setOrders] = useState([])
-  const [stats, setStats] = useState(null)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
-  const [selectedOrder, setSelectedOrder] = useState(null)
-  const [updatingStatus, setUpdatingStatus] = useState(null)
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null)
 
   useEffect(() => {
     fetchOrders()
@@ -43,7 +64,9 @@ export function AdminDashboard() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders')
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders`,
+      )
       const data = await response.json()
       if (data.success) {
         setOrders(data.orders)
@@ -58,7 +81,7 @@ export function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const response = await fetch(
-        'http://localhost:5000/api/orders/stats/dashboard',
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders/stats/dashboard`,
       )
       const data = await response.json()
       if (data.success) {
@@ -69,11 +92,11 @@ export function AdminDashboard() {
     }
   }
 
-  const confirmPayment = async (orderId) => {
+  const confirmPayment = async (orderId: string) => {
     setUpdatingStatus(orderId)
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${orderId}/confirm-payment`,
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders/${orderId}/confirm-payment`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -93,11 +116,11 @@ export function AdminDashboard() {
     }
   }
 
-  const updateOrderStatus = async (orderId, newStatus) => {
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
     setUpdatingStatus(orderId)
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${orderId}/status`,
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders/${orderId}/status`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

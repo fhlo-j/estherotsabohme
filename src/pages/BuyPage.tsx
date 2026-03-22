@@ -43,7 +43,7 @@ export function BuyPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/user/${email}`,
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders/user/${email}`,
       )
       const data = await response.json()
 
@@ -100,7 +100,7 @@ export function BuyPage() {
       const mockUrl = URL.createObjectURL(uploadedFile)
 
       const response = await fetch(
-        `http://localhost:5000/api/orders/${orderData._id}/submit-receipt`,
+        `${import.meta.env.VITE_API_URL ?? ''}/api/orders/${orderData._id}/submit-receipt`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
