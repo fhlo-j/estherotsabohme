@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,25 +6,25 @@
 
 @layer base {
   :root {
-    --background: 210 50% 98%;
-    --foreground: 222 47% 6%;
+    --background: 43 38% 96%;
+    --foreground: 220 40% 10%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 6%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 6%;
-    --primary: 217 91% 60%;
+    --primary: 213 69% 20%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
+    --secondary: 38 35% 92%;
     --secondary-foreground: 222 47% 6%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 45 93% 47%;
+    --muted: 36 25% 93%;
+    --muted-foreground: 217 17% 38%;
+    --accent: 39 54% 45%;
     --accent-foreground: 222 47% 6%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 60%;
+    --border: 36 18% 82%;
+    --input: 36 18% 82%;
+    --ring: 211 58% 30%;
     --radius: 0.625rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -41,68 +41,101 @@
   * {
     @apply border-border;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    @apply bg-sky-50 text-navy font-sans antialiased;
+    @apply text-navy font-sans antialiased;
+    background:
+      radial-gradient(
+        circle at 20% 10%,
+        rgba(212, 175, 55, 0.12) 0%,
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 80% 0%,
+        rgba(37, 99, 235, 0.09) 0%,
+        transparent 42%
+      ),
+      linear-gradient(180deg, #fcf8f0 0%, #f8f2e8 44%, #f6f8fb 100%);
     overflow-x: hidden;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif;
+    text-wrap: balance;
   }
 }
 
 @layer components {
   .cloud-card {
-    @apply bg-white rounded-cloud shadow-cloud border border-white/65;
+    @apply rounded-cloud border;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.93),
+      rgba(255, 251, 244, 0.86)
+    );
+    box-shadow: 0 20px 52px rgba(15, 23, 42, 0.08);
+    border-color: rgba(148, 130, 94, 0.24);
   }
-  
+
   .cloud-card-lg {
-    @apply bg-white rounded-cloud-lg shadow-cloud-lg border border-white/65;
+    @apply rounded-cloud-lg border;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 251, 244, 0.9)
+    );
+    box-shadow: 0 26px 70px rgba(15, 23, 42, 0.11);
+    border-color: rgba(148, 130, 94, 0.26);
   }
-  
+
   .text-gradient {
     @apply bg-gradient-to-r from-sky-500 to-sky-600 bg-clip-text text-transparent;
   }
-  
+
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 bg-sky-500 text-white font-medium rounded-full 
-           transition-all duration-300 hover:bg-sky-600 hover:shadow-glow hover:scale-105
+    @apply inline-flex items-center justify-center px-8 py-4 bg-navy text-white font-semibold rounded-full 
+           transition-all duration-300 hover:bg-navy/90 hover:scale-[1.02]
            active:scale-95;
+    box-shadow: 0 14px 35px rgba(11, 15, 25, 0.25);
   }
-  
+
   .btn-outline {
-    @apply inline-flex items-center justify-center px-8 py-4 bg-transparent text-navy font-medium rounded-full 
-           border-2 border-navy/20 transition-all duration-300 
-           hover:bg-navy hover:text-white hover:border-navy;
+    @apply inline-flex items-center justify-center px-8 py-4 bg-transparent text-navy font-semibold rounded-full 
+           border-2 border-[#9a8759]/45 transition-all duration-300 
+           hover:bg-[#f5ecda] hover:text-navy hover:border-[#9a8759];
   }
-  
+
   .section-padding {
-    @apply px-4 sm:px-6 lg:px-8 xl:px-12;
+    @apply px-5 sm:px-8 lg:px-12 xl:px-16;
   }
-  
+
   .heading-xl {
-    @apply text-[clamp(44px,5.2vw,78px)] leading-[0.95] tracking-tight font-serif font-semibold;
+    @apply text-[clamp(44px,5.6vw,84px)] leading-[0.92] tracking-[-0.015em] font-serif font-semibold;
   }
-  
+
   .heading-lg {
-    @apply text-[clamp(34px,3.6vw,54px)] leading-[1.05] font-serif font-semibold;
+    @apply text-[clamp(34px,3.8vw,58px)] leading-[1.03] tracking-[-0.01em] font-serif font-semibold;
   }
-  
+
   .heading-md {
-    @apply text-[clamp(22px,2.2vw,32px)] leading-[1.15] font-serif font-medium;
+    @apply text-[clamp(22px,2.3vw,34px)] leading-[1.14] tracking-[-0.01em] font-serif font-medium;
   }
-  
+
   .body-text {
-    @apply text-[clamp(15px,1.15vw,18px)] leading-[1.65] font-sans;
+    @apply text-[clamp(15px,1.1vw,18px)] leading-[1.72] font-sans;
   }
-  
+
   .eyebrow {
-    @apply text-xs font-medium tracking-[0.12em] uppercase text-gray-500;
+    @apply text-[11px] font-semibold tracking-[0.2em] uppercase text-[#6d5d39];
   }
 }
 
@@ -110,7 +143,7 @@
   .cloud-mask {
     clip-path: url(#cloud-clip);
   }
-  
+
   .noise-overlay {
     position: fixed;
     top: 0;
@@ -119,7 +152,7 @@
     height: 100%;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.04;
+    opacity: 0.03;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
@@ -131,20 +164,20 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F6FAFF;
+  background: #f6f1e6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3B82F6;
+  background: #1f3959;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2563EB;
+  background: #0f223b;
 }
 
 /* Selection color */
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: #0B0F19;
+  background: rgba(212, 175, 55, 0.35);
+  color: #0b0f19;
 }
