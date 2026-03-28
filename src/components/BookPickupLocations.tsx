@@ -152,17 +152,24 @@ const contactInfo = [
 export function BookPickupLocations() {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const filteredLocations = bookshopLocations
-    .map((group) => ({
-      ...group,
-      bookshops: group.bookshops.filter(
-        (bookshop) =>
-          bookshop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          bookshop.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          group.region.toLowerCase().includes(searchTerm.toLowerCase()),
-      ),
-    }))
-    .filter((group) => group.bookshops.length > 0)
+  const filteredLocations =
+    searchTerm.trim() === ''
+      ? bookshopLocations
+      : bookshopLocations
+          .map((group) => ({
+            ...group,
+            bookshops: group.bookshops.filter(
+              (bookshop) =>
+                bookshop.name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                bookshop.address
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                group.region.toLowerCase().includes(searchTerm.toLowerCase()),
+            ),
+          }))
+          .filter((group) => group.bookshops.length > 0)
 
   const handleCall = (phone: string) => {
     window.location.href = `tel:${phone}`
@@ -196,11 +203,29 @@ export function BookPickupLocations() {
               type="text"
               placeholder="Search by bookshop name, address, or region..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value)
+              }}
               className="w-full px-4 py-3 pl-12 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
             <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
           </div>
+          {searchTerm && (
+            <p className="text-sm text-slate-600 mt-2">
+              Found{' '}
+              {filteredLocations.reduce(
+                (sum, loc) => sum + loc.bookshops.length,
+                0,
+              )}{' '}
+              matching bookshop
+              {filteredLocations.reduce(
+                (sum, loc) => sum + loc.bookshops.length,
+                0,
+              ) !== 1
+                ? 's'
+                : ''}
+            </p>
+          )}
         </div>
 
         {/* Accordion Sections */}
@@ -208,6 +233,7 @@ export function BookPickupLocations() {
           <Accordion
             type="multiple"
             className="space-y-4"
+            key={`accordion-${searchTerm}`}
           >
             {filteredLocations.length > 0 ? (
               filteredLocations.map((location, index) => (

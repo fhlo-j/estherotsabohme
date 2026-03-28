@@ -13,6 +13,64 @@ const PICKUP_NOTICE =
 
 const MAX_RECEIPT_SIZE = 5 * 1024 * 1024
 
+const PICKUP_LOCATIONS = [
+  'Ave Maria - Kusenla',
+  'Our Lady Star Of The Sea - Chevron',
+  'Church of Transfiguration - VGC',
+  'Regina Pacis - Lekki Epe Expressway',
+  'St. Theresa - Ikota Lekki',
+  'SS Philip & James - Idado, Lekki/Epe Expressway',
+  'Our Lady Mother Of Perpetual Help - Addo Ajah',
+  'Charles Boromeo - 1004 Estate V/I',
+  'Catholic Cathedral Church Of Christ - Marina',
+  'Cathedral Of The Holy Cross - Lagos Island',
+  'Church Of The Assumption - Falomo Ikoyi',
+  'Our Lady Of Perpetual Help - V/I',
+  "St. Michael's - Lafiaji Obalende",
+  'St Timothy - Ojodu off Yakoyo Road',
+  'Catholic Church Of The Holy Spirit - Omole Estate Phase 1',
+  'St. Gerald - Adekunle Osomo Street, Gbagada',
+  'Our Lady Queen of Peace - Yetunde Brown Street, Ifako',
+  'Our Lady Queen of Apostles - Ilupeju',
+  'Sacred Heart - Ojota',
+  'SS Peter & Paul - Abeokuta Street, Shomolu',
+  'St Denis - Thomas Drive, Bariga',
+  'St Raphael The Archangel - Adewale Ayuba Street, Anthony',
+  'St Charles Lwanga - Army Cantonment, Ikeja',
+  'St Flavius - Akerele Street, Oworonshoki',
+  "St Mary's - Ire Akari Estate Road, Oshodi-Isolo",
+  'Regina Mundi - 142-144 Agege Motor Road',
+  'St Theresa - 27 Ibari Street, Ifako Agege',
+  'St Louis - 10 Orelope Street, Egbeda',
+  'St Joachim & Ann - Ijegun',
+  'St Francis - Iliasu Road',
+  'St Bernadette - Ipaja',
+  'Chapel of Christ The Light - Alausa',
+  "St Leo's - 1 Amore Street",
+  'Church Of The Presentation - Oba Akinjobi Street, GRA',
+  'St Francis - Oremeji Street, Oregun',
+  'Christ The King - off Shasha Road, Egbeda',
+  'St Jude - Mafoluku Oshodi',
+  'St Augustine - Airforce Base Ikeja',
+  'Church Of Resurrection - Ikosi Ketu',
+  'St Agnes - Mende Maryland',
+  'Holy Family Catholic Church - 2nd Avenue Festac Town',
+  'St Michael - Alapere Lagos',
+  'Jesus The Saviour - Isheri Osun',
+  'Archbishop Vining Memorial Church - Oba Akinjobi Way GRA',
+  'Sacred Heart - 43 Creek Road, Apapa',
+  'St Vincent De Paul - Ebunoti Street',
+  'St Margaret - Musibau Oluwa',
+  'Church Of Visitation - 1st Avenue, Festac Town',
+  'Archangel Catholic Church - 1 Mission Street, Satellite Town',
+  'Watchman Charismatic Renewal Movement - Olodi Apapa',
+  "St Paul's - 88 Murtala Mohammed Way",
+  "St Dominic's - Yaba",
+  'Our Lady Of Fatima - 1-3 Adebayo Shode Street',
+  "St Anthony's - 6-8 Gbaja Street",
+  'Queen of The Most Holy Rosary - 76 Sanya Street, Ijesha Tedo',
+]
+
 interface PaymentSectionProps {
   onSectionRef?: (ref: React.RefObject<HTMLDivElement | null>) => void
 }
@@ -37,6 +95,8 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const [pickupSearchTerm, setPickupSearchTerm] = useState('')
+  const [showPickupSuggestions, setShowPickupSuggestions] = useState(false)
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -49,6 +109,13 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
     pickupLocation: '',
   })
 
+  const filteredPickupLocations = useMemo(() => {
+    if (!pickupSearchTerm.trim()) return []
+    return PICKUP_LOCATIONS.filter((location) =>
+      location.toLowerCase().includes(pickupSearchTerm.toLowerCase()),
+    )
+  }, [pickupSearchTerm])
+
   useEffect(() => {
     onSectionRef?.(sectionRef)
   }, [onSectionRef])
@@ -57,6 +124,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
     bookFormat === 'hardcopy' && deliveryMethod === 'home-delivery'
   const requiresPickup =
     bookFormat === 'hardcopy' && deliveryMethod === 'pickup'
+  const requiresPayment = bookFormat === 'ebook'
 
   const canProceedToPayment = useMemo(() => {
     if (bookFormat === 'ebook') {
@@ -94,7 +162,13 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    if (name === 'pickupLocation') {
+      setPickupSearchTerm(value)
+      setFormData((prev) => ({ ...prev, pickupLocation: value }))
+      setShowPickupSuggestions(true)
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
     setError('')
     setMessage('')
   }
@@ -138,14 +212,23 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
       return
     }
 
-    if (!receiptFile) {
+    // Receipt is required for e-book only
+    if (requiresPayment && !receiptFile) {
       setError('Please upload your payment receipt before submitting.')
       return
     }
 
     try {
       setLoading(true)
-      const dataUrl = await toDataUrl(receiptFile)
+      let dataUrl = ''
+      let receiptFileName = ''
+      let receiptMimeType = 'application/octet-stream'
+
+      if (receiptFile) {
+        dataUrl = await toDataUrl(receiptFile)
+        receiptFileName = receiptFile.name
+        receiptMimeType = receiptFile.type || 'application/octet-stream'
+      }
 
       const [firstName, ...restName] = (
         formData.fullName.trim() || 'Buyer'
@@ -165,9 +248,9 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
         quantity: 1,
         deliveryMethod: bookFormat === 'hardcopy' ? deliveryMethod : null,
         pickupLocation: requiresPickup ? formData.pickupLocation.trim() : null,
-        paymentReceiptDataUrl: dataUrl,
-        paymentReceiptFileName: receiptFile.name,
-        paymentReceiptMimeType: receiptFile.type || 'application/octet-stream',
+        paymentReceiptDataUrl: dataUrl || null,
+        paymentReceiptFileName: receiptFileName || null,
+        paymentReceiptMimeType: receiptMimeType,
       }
 
       const response = await fetch(
@@ -425,14 +508,43 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                   <label className="block text-sm font-medium text-navy mb-2">
                     Preferred Pickup Spot *
                   </label>
-                  <input
-                    type="text"
-                    name="pickupLocation"
-                    value={formData.pickupLocation}
-                    onChange={handleChange}
-                    placeholder="Type preferred pickup location from list below"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="pickupLocation"
+                      value={pickupSearchTerm}
+                      onChange={handleChange}
+                      onFocus={() => setShowPickupSuggestions(true)}
+                      placeholder="Type to search pickup locations..."
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                    />
+                    {showPickupSuggestions && filteredPickupLocations.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
+                        {filteredPickupLocations.map((location) => (
+                          <button
+                            key={location}
+                            type="button"
+                            onClick={() => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                pickupLocation: location,
+                              }))
+                              setPickupSearchTerm(location)
+                              setShowPickupSuggestions(false)
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-sky-50 border-b border-gray-100 last:border-0 transition-colors text-sm text-gray-700"
+                          >
+                            {location}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {pickupSearchTerm && filteredPickupLocations.length === 0 && showPickupSuggestions && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-10">
+                        <p className="text-sm text-gray-500">No locations found matching "{pickupSearchTerm}"</p>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5" /> All pickup spots are
                     listed below this section.
@@ -444,108 +556,128 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
 
           <div className="border-t border-[#dccaa2] pt-8">
             <h3 className="heading-md text-navy mb-5">Payment Details</h3>
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
-              <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                <p className="text-xs text-gray-500 mb-1">Account Name</p>
-                <p className="font-mono font-medium text-navy">
-                  Esther Mike Otsabomhe
-                </p>
-              </div>
-
-              <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                <p className="text-xs text-gray-500 mb-1">Account Number</p>
-                <div className="flex items-center justify-between">
-                  <p className="font-mono font-medium text-navy">1234567890</p>
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard('1234567890')}
-                    className="ml-2 p-2 hover:bg-sky-200 rounded-lg transition-colors"
-                    title="Copy account number"
-                  >
-                    <Copy className="w-4 h-4 text-sky-600" />
-                  </button>
-                </div>
-                {copied && (
-                  <p className="text-xs text-green-600 mt-2">Copied!</p>
-                )}
-              </div>
-            </div>
-
-            <div className="p-6 bg-amber-50 rounded-xl border-l-4 border-amber-500 mb-6">
-              <div className="flex gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold text-amber-900 mb-1">
-                    Important
-                  </h4>
-                  <p className="text-sm text-amber-800">
-                    Make transfer, then upload your receipt. For hardcopy home
-                    delivery, final delivery fee will be communicated based on
-                    location.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-navy mb-3">
-                Upload Payment Receipt *
-              </label>
-              <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-                  dragOver
-                    ? 'border-sky-500 bg-sky-50'
-                    : 'border-gray-300 bg-gray-50'
-                }`}
-              >
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-                {receiptFile ? (
-                  <div>
-                    <p className="font-medium text-navy mb-1">
-                      {receiptFile.name}
+            {requiresPayment && (
+              <>
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
+                    <p className="text-xs text-gray-500 mb-1">Account Name</p>
+                    <p className="font-mono font-medium text-navy">
+                      Esther Mike Otsabomhe
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {(receiptFile.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setReceiptFile(null)}
-                      className="text-xs text-sky-600 hover:text-sky-700 mt-2 underline"
-                    >
-                      Remove file
-                    </button>
                   </div>
-                ) : (
-                  <>
-                    <p className="text-gray-700 font-medium mb-1">
-                      Drag and drop your receipt here
+
+                  <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
+                    <p className="text-xs text-gray-500 mb-1">Account Number</p>
+                    <div className="flex items-center justify-between">
+                      <p className="font-mono font-medium text-navy">1234567890</p>
+                      <button
+                        type="button"
+                        onClick={() => copyToClipboard('1234567890')}
+                        className="ml-2 p-2 hover:bg-sky-200 rounded-lg transition-colors"
+                        title="Copy account number"
+                      >
+                        <Copy className="w-4 h-4 text-sky-600" />
+                      </button>
+                    </div>
+                    {copied && (
+                      <p className="text-xs text-green-600 mt-2">Copied!</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-6 bg-amber-50 rounded-xl border-l-4 border-amber-500 mb-6">
+                  <div className="flex gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-amber-900 mb-1">
+                        Important
+                      </h4>
+                      <p className="text-sm text-amber-800">
+                        Make transfer to the account above, then upload your receipt.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-navy mb-3">
+                    Upload Payment Receipt *
+                  </label>
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
+                      dragOver
+                        ? 'border-sky-500 bg-sky-50'
+                        : 'border-gray-300 bg-gray-50'
+                    }`}
+                  >
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+                    {receiptFile ? (
+                      <div>
+                        <p className="font-medium text-navy mb-1">
+                          {receiptFile.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {(receiptFile.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setReceiptFile(null)}
+                          className="text-xs text-sky-600 hover:text-sky-700 mt-2 underline"
+                        >
+                          Remove file
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-gray-700 font-medium mb-1">
+                          Drag and drop your receipt here
+                        </p>
+                        <p className="text-xs text-gray-500 mb-4">
+                          or click to select a file
+                        </p>
+                        <input
+                          type="file"
+                          onChange={handleFileSelect}
+                          accept="image/*,.pdf"
+                          className="hidden"
+                          id="receipt-upload"
+                        />
+                        <label
+                          htmlFor="receipt-upload"
+                          className="text-sm text-sky-600 hover:text-sky-700 underline cursor-pointer"
+                        >
+                          Browse files
+                        </label>
+                        <p className="text-xs text-gray-400 mt-3">
+                          PNG, JPG, JPEG, PDF (Max 5MB)
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {!requiresPayment && (
+              <div className="p-6 bg-sky-50 rounded-xl border border-sky-200">
+                <div className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-sky-900 mb-1">
+                      Order Confirmed
+                    </h4>
+                    <p className="text-sm text-sky-800">
+                      {requiresPickup 
+                        ? 'Your pickup order is ready. You can pick up your book from the selected location. Payment method will be communicated separately.'
+                        : 'Your hardcopy delivery order is ready. Delivery fee will be communicated based on your location.'}
                     </p>
-                    <p className="text-xs text-gray-500 mb-4">
-                      or click to select a file
-                    </p>
-                    <input
-                      type="file"
-                      onChange={handleFileSelect}
-                      accept="image/*,.pdf"
-                      className="hidden"
-                      id="receipt-upload"
-                    />
-                    <label
-                      htmlFor="receipt-upload"
-                      className="text-sm text-sky-600 hover:text-sky-700 underline cursor-pointer"
-                    >
-                      Browse files
-                    </label>
-                    <p className="text-xs text-gray-400 mt-3">
-                      PNG, JPG, JPEG, PDF (Max 5MB)
-                    </p>
-                  </>
-                )}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <button
@@ -558,8 +690,10 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                 <Loader2 className="w-5 h-5 animate-spin" />
                 Submitting...
               </>
-            ) : (
+            ) : requiresPayment ? (
               'Submit Order & Receipt'
+            ) : (
+              'Submit Order'
             )}
           </button>
         </form>
