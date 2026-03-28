@@ -518,32 +518,37 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       placeholder="Type to search pickup locations..."
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                     />
-                    {showPickupSuggestions && filteredPickupLocations.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
-                        {filteredPickupLocations.map((location) => (
-                          <button
-                            key={location}
-                            type="button"
-                            onClick={() => {
-                              setFormData((prev) => ({
-                                ...prev,
-                                pickupLocation: location,
-                              }))
-                              setPickupSearchTerm(location)
-                              setShowPickupSuggestions(false)
-                            }}
-                            className="w-full text-left px-4 py-3 hover:bg-sky-50 border-b border-gray-100 last:border-0 transition-colors text-sm text-gray-700"
-                          >
-                            {location}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    {pickupSearchTerm && filteredPickupLocations.length === 0 && showPickupSuggestions && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-10">
-                        <p className="text-sm text-gray-500">No locations found matching "{pickupSearchTerm}"</p>
-                      </div>
-                    )}
+                    {showPickupSuggestions &&
+                      filteredPickupLocations.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
+                          {filteredPickupLocations.map((location) => (
+                            <button
+                              key={location}
+                              type="button"
+                              onClick={() => {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  pickupLocation: location,
+                                }))
+                                setPickupSearchTerm(location)
+                                setShowPickupSuggestions(false)
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-sky-50 border-b border-gray-100 last:border-0 transition-colors text-sm text-gray-700"
+                            >
+                              {location}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    {pickupSearchTerm &&
+                      filteredPickupLocations.length === 0 &&
+                      showPickupSuggestions && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-10">
+                          <p className="text-sm text-gray-500">
+                            No locations found matching "{pickupSearchTerm}"
+                          </p>
+                        </div>
+                      )}
                   </div>
                   <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5" /> All pickup spots are
@@ -569,7 +574,9 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                   <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
                     <p className="text-xs text-gray-500 mb-1">Account Number</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-mono font-medium text-navy">1234567890</p>
+                      <p className="font-mono font-medium text-navy">
+                        1234567890
+                      </p>
                       <button
                         type="button"
                         onClick={() => copyToClipboard('1234567890')}
@@ -593,7 +600,8 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                         Important
                       </h4>
                       <p className="text-sm text-amber-800">
-                        Make transfer to the account above, then upload your receipt.
+                        Make transfer to the account above, then upload your
+                        receipt.
                       </p>
                     </div>
                   </div>
@@ -670,7 +678,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       Order Confirmed
                     </h4>
                     <p className="text-sm text-sky-800">
-                      {requiresPickup 
+                      {requiresPickup
                         ? 'Your pickup order is ready. You can pick up your book from the selected location. Payment method will be communicated separately.'
                         : 'Your hardcopy delivery order is ready. Delivery fee will be communicated based on your location.'}
                     </p>
