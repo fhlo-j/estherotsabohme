@@ -1,12 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   BookOpen,
-  Calendar,
-  MapPin,
-  Clock,
   Mail,
   Phone,
   MessageCircle,
@@ -16,10 +13,21 @@ import {
   Instagram,
   Youtube,
   Twitter,
+  Landmark,
 } from 'lucide-react'
 import './App.css'
 import { AboutBook } from './components/AboutBook'
 import { BookShowcase } from './components/BookShowcase'
+import { SiteNav } from './components/SiteNav'
+import {
+  SITE_BANK_ACCOUNT_NAME,
+  SITE_BANK_ACCOUNT_NUMBER_DISPLAY,
+  SITE_BANK_NAME,
+  SITE_EMAIL_DISPLAY,
+  SITE_PHONE_DISPLAY,
+  telHref,
+  whatsappHref,
+} from '@/lib/siteContact'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -27,52 +35,11 @@ const AUTHOR_IMAGE_PRIMARY = '/images/AUTHOR IMAGE1.jpg'
 
 function App() {
   const appRef = useRef<HTMLDivElement>(null)
-  const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  })
-  const [navScrolled, setNavScrolled] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
   const bookRevealRef = useRef<HTMLDivElement>(null)
   const eventRef = useRef<HTMLDivElement>(null)
   const contactRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLDivElement>(null)
-
-  // Countdown timer
-  useEffect(() => {
-    const eventDate = new Date('2026-04-25T16:00:00').getTime()
-
-    const updateCountdown = () => {
-      const now = new Date().getTime()
-      const distance = eventDate - now
-
-      if (distance > 0) {
-        setCountdown({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-          ),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000),
-        })
-      }
-    }
-
-    updateCountdown()
-    const interval = setInterval(updateCountdown, 1000)
-    return () => clearInterval(interval)
-  }, [])
-
-  // Navigation scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setNavScrolled(window.scrollY > 100)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   // GSAP Animations
   useEffect(() => {
@@ -228,54 +195,13 @@ function App() {
         </defs>
       </svg>
 
-      {/* Navigation */}
-      <nav
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          navScrolled
-            ? 'bg-[#fbf6ec]/88 backdrop-blur-lg shadow-[0_10px_30px_rgba(11,15,25,0.08)] border-b border-[#c7b487]/30'
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="section-padding py-4">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <button
-              onClick={() => scrollToSection(heroRef)}
-              className="font-serif text-2xl tracking-wide font-semibold text-navy hover:text-[#705822] transition-colors"
-            >
-              God First
-            </button>
-
-            <div className="hidden md:flex items-center gap-8">
-              <button
-                onClick={() => scrollToSection(bookRevealRef)}
-                className="text-sm font-semibold tracking-wide text-navy/70 hover:text-[#705822] transition-colors"
-              >
-                About the Book
-              </button>
-              <button
-                onClick={() => scrollToSection(eventRef)}
-                className="text-sm font-semibold tracking-wide text-navy/70 hover:text-[#705822] transition-colors"
-              >
-                Event
-              </button>
-              <button
-                onClick={() => scrollToSection(contactRef)}
-                className="text-sm font-semibold tracking-wide text-navy/70 hover:text-[#705822] transition-colors"
-              >
-                Contact
-              </button>
-            </div>
-
-            <Link
-              to="/buy"
-              className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 bg-navy text-white text-sm font-semibold rounded-full hover:bg-navy/90 transition-colors"
-            >
-              <BookOpen className="w-4 h-4" />
-              Buy Now
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <SiteNav
+        variant="home"
+        onLogoClick={() => scrollToSection(heroRef)}
+        onAboutBook={() => scrollToSection(bookRevealRef)}
+        onEvent={() => scrollToSection(eventRef)}
+        onContact={() => scrollToSection(contactRef)}
+      />
 
       {/* Hero Section */}
       <section
@@ -305,11 +231,11 @@ function App() {
             {/* Left: Image */}
             <div className="w-full lg:w-1/2">
               <div className="relative">
-                <div className="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-cloud-lg ring-1 ring-[#c5b184]/40">
+                <div className="rounded-[2rem] overflow-hidden shadow-cloud-lg ring-1 ring-[#c5b184]/40">
                   <img
                     src={AUTHOR_IMAGE_PRIMARY}
                     alt="Esther Otsabomhe portrait"
-                    className="w-full h-full object-cover object-[center_12%]"
+                    className="w-full h-auto object-contain"
                   />
                 </div>
                 {/* Decorative elements */}
@@ -320,18 +246,18 @@ function App() {
 
             {/* Right: Text Content */}
             <div className="w-full lg:w-1/2 text-center lg:text-left">
-              <p className="eyebrow mb-5">The Official Book Launch</p>
+              <p className="eyebrow mb-5 text-[#6d5d39]">The Official Book Launch</p>
 
               <h1 className="hero-title heading-xl text-navy mb-5">
                 <span className="inline-block">God</span>{' '}
                 <span className="inline-block">First</span>
               </h1>
 
-              <p className="heading-md text-[#705822] mb-2">
+              <p className="heading-md text-[#8b6f47] mb-2">
                 Determination & Fulfilment
               </p>
 
-              <p className="hero-subtitle text-lg text-gray-600 mb-2">
+              <p className="hero-subtitle text-lg text-gray-700 mb-2">
                 by{' '}
                 <span className="font-medium text-navy">Esther Otsabomhe</span>
               </p>
@@ -375,103 +301,61 @@ function App() {
         onSectionRef={(ref) => (bookRevealRef.current = ref.current)}
       />
 
-      {/* Event Invitation Section */}
+      {/* Invitation Section */}
       <section
         ref={eventRef}
-        className="relative py-28 lg:py-36 overflow-hidden"
+        className="relative py-16 lg:py-24 overflow-hidden bg-gradient-to-b from-[#071a3d] via-[#0b2452] to-[#0e3068] ring-1 ring-[#d4af37]/28 shadow-[inset_0_1px_0_rgba(212,175,55,0.12)]"
       >
-        <div className="event-content section-padding max-w-6xl mx-auto">
-          <div className="cloud-card-lg p-8 lg:p-14">
-            <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
-              {/* Left: Image */}
-              <div className="w-full lg:w-2/5">
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden">
-                  <img
-                    src={AUTHOR_IMAGE_PRIMARY}
-                    alt="Esther Otsabomhe at the book launch"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+        <div className="section-padding max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="eyebrow text-gold-300 mb-4">You're Invited</p>
+            <h2 className="heading-lg text-white mb-4">Triple Celebration</h2>
+          </div>
 
-              {/* Right: Event Details */}
-              <div className="w-full lg:w-3/5 flex flex-col justify-center">
-                <p className="eyebrow mb-3">You're Invited</p>
-                <h2 className="heading-lg text-navy mb-2">
-                  to the official book launch of
-                </h2>
-                <h3 className="heading-md text-[#705822] mb-8">God First</h3>
+          <div className="relative rounded-[2rem] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.4)] border border-[#d4af37]/40">
+            <img
+              src="/images/invitation.jpg"
+              alt="Triple Celebration Invitation - Chief Mike & Barr. Esther Otsabomhe"
+              className="w-full h-auto block max-h-[90vh]"
+            />
+          </div>
 
-                {/* Event Info Cards */}
-                <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                  <div className="flex items-center gap-4 p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                    <div className="w-12 h-12 bg-navy rounded-full flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Date</p>
-                      <p className="font-medium text-navy">
-                        Saturday 25th April 2026
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                    <div className="w-12 h-12 bg-navy rounded-full flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Time</p>
-                      <p className="font-medium text-navy">4:00 PM Prompt</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 p-4 bg-[#f9f4e8] rounded-xl sm:col-span-2 border border-[#e4d6b5]">
-                    <div className="w-12 h-12 bg-navy rounded-full flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Venue</p>
-                      <p className="font-medium text-navy">
-                        Church of Assumption, Falomo, Ikoyi
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Countdown */}
-                <div className="mb-8">
-                  <p className="text-sm text-gray-500 mb-3">Event starts in:</p>
-                  <div className="flex gap-3">
-                    {[
-                      { value: countdown.days, label: 'Days' },
-                      { value: countdown.hours, label: 'Hours' },
-                      { value: countdown.minutes, label: 'Mins' },
-                      { value: countdown.seconds, label: 'Secs' },
-                    ].map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col items-center"
-                      >
-                        <div className="w-16 h-16 bg-navy rounded-xl flex items-center justify-center">
-                          <span className="text-2xl font-bold text-white">
-                            {String(item.value).padStart(2, '0')}
-                          </span>
-                        </div>
-                        <span className="text-xs text-gray-500 mt-1">
-                          {item.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <button className="btn-primary w-full sm:w-auto gap-2">
-                  <Mail className="w-5 h-5" />
-                  RSVP Now
-                </button>
-              </div>
-            </div>
+          <div className="mt-12 text-center">
+            <p className="text-[#e5d9b1] text-sm leading-relaxed max-w-2xl mx-auto">
+              <span className="font-semibold text-white block mb-2">
+                Event Details:
+              </span>
+              Sunday 3rd May 2026 at 2:00 PM Prompt
+              <br />
+              The Monarch Event Center, 138 Lekki - Epe Expressway, Lekki
+              Peninsula II, Lagos
+              <br />
+              <span className="font-semibold text-gold-300 block mt-4">
+                RSVP: Mr Kunle Abiola - 08090564149
+              </span>
+              <span className="inline-block mt-5 text-[#c8daf5]">
+                Book orders & transfers:{' '}
+                <a
+                  href={telHref()}
+                  className="font-semibold text-gold-100 hover:text-white underline underline-offset-2"
+                >
+                  {SITE_PHONE_DISPLAY}
+                </a>{' '}
+                ·{' '}
+                <a
+                  href={whatsappHref()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-emerald-200 hover:text-emerald-100 underline underline-offset-2"
+                >
+                  WhatsApp
+                </a>{' '}
+                · {SITE_BANK_NAME}{' '}
+                <span className="font-mono text-gold-200/95">
+                  {SITE_BANK_ACCOUNT_NUMBER_DISPLAY}
+                </span>
+              </span>
+            </p>
           </div>
         </div>
       </section>
@@ -484,14 +368,14 @@ function App() {
         ref={contactRef}
         className="relative py-28 lg:py-36 overflow-hidden"
       >
-        <div className="contact-content section-padding max-w-5xl mx-auto">
-          <div className="cloud-card-lg p-8 lg:p-14">
+        <div className="contact-content section-padding max-w-5xl mx-auto animate-fade-rise motion-reduce:animate-none motion-reduce:opacity-100">
+          <div className="cloud-card-lg p-8 lg:p-14 transition-shadow duration-500 hover:shadow-[0_32px_80px_rgba(7,26,61,0.18)]">
             <div className="text-center mb-10">
-              <p className="eyebrow mb-4">Get in Touch</p>
-              <h2 className="heading-lg text-navy mb-4">
+              <p className="eyebrow mb-4 !text-gold-300/95">Get in Touch</p>
+              <h2 className="heading-lg text-white mb-4">
                 Connect With Our Team
               </h2>
-              <p className="body-text text-gray-500 max-w-xl mx-auto">
+              <p className="body-text text-white/80 max-w-xl mx-auto">
                 Have questions about the book, event, or partnership
                 opportunities? We'd love to hear from you.
               </p>
@@ -507,41 +391,65 @@ function App() {
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
                     <a
-                      href="mailto:info@godfirstbook.com"
-                      className="font-medium text-navy hover:text-[#705822] transition-colors"
+                      href={`mailto:${SITE_EMAIL_DISPLAY}`}
+                      className="font-medium text-navy hover:text-[#8b6f47] transition-colors"
                     >
-                      info@godfirstbook.com
+                      {SITE_EMAIL_DISPLAY}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-md ring-2 ring-[#d4af37]/25">
                     <MessageCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">WhatsApp</p>
                     <a
-                      href="https://wa.me/234"
-                      className="font-medium text-navy hover:text-green-500 transition-colors"
+                      href={whatsappHref()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-navy hover:text-green-700 transition-colors"
                     >
-                      +234 XXX XXX XXXX
+                      {SITE_PHONE_DISPLAY}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                  <div className="w-12 h-12 bg-navy rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#071b3d] to-sky-700 rounded-full flex items-center justify-center shadow-md ring-2 ring-[#d4af37]/25">
                     <Phone className="w-6 h-6 text-white" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Phone</p>
                     <a
-                      href="tel:+234"
-                      className="font-medium text-navy hover:text-sky-500 transition-colors"
+                      href={telHref()}
+                      className="font-medium text-navy hover:text-sky-600 transition-colors"
                     >
-                      +234 XXX XXX XXXX
+                      {SITE_PHONE_DISPLAY}
                     </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
+                  <div className="w-12 h-12 shrink-0 bg-gradient-to-br from-[#b8952e] to-[#d4af37] rounded-full flex items-center justify-center shadow-md ring-2 ring-[#071b3d]/15">
+                    <Landmark className="w-6 h-6 text-[#082040]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm text-gray-500">Bank payment</p>
+                    <p className="font-semibold text-navy">{SITE_BANK_NAME}</p>
+                    <p className="text-sm font-mono font-medium text-navy mt-1">
+                      Acc. name: {SITE_BANK_ACCOUNT_NAME}
+                    </p>
+                    <p className="text-sm font-mono font-semibold text-navy tracking-wide mt-1">
+                      {SITE_BANK_ACCOUNT_NUMBER_DISPLAY}
+                    </p>
+                    <Link
+                      to="/buy"
+                      className="text-xs font-semibold text-sky-600 hover:text-sky-800 mt-2 inline-flex items-center gap-1"
+                    >
+                      Order & receipt → Buy page
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -551,34 +459,34 @@ function App() {
                 <form className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">
+                      <label className="block text-sm font-medium text-gold-100/95 mb-2">
                         Name
                       </label>
                       <input
                         type="text"
                         placeholder="Your name"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-navy placeholder:text-gray-400 focus:border-[#8b6f47] focus:ring-2 focus:ring-[#8b6f47]/20 outline-none transition-all"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">
+                      <label className="block text-sm font-medium text-gold-100/95 mb-2">
                         Email
                       </label>
                       <input
                         type="email"
                         placeholder="your@email.com"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-navy placeholder:text-gray-400 focus:border-[#8b6f47] focus:ring-2 focus:ring-[#8b6f47]/20 outline-none transition-all"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">
+                    <label className="block text-sm font-medium text-gold-100/95 mb-2">
                       Message
                     </label>
                     <textarea
                       rows={4}
                       placeholder="How can we help you?"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-navy placeholder:text-gray-400 focus:border-[#8b6f47] focus:ring-2 focus:ring-[#8b6f47]/20 outline-none transition-all resize-none"
                     />
                   </div>
                   <button
@@ -601,10 +509,49 @@ function App() {
         className="relative py-18 lg:py-24 overflow-hidden bg-[#fffaf0] border-t border-[#dac89f]/40"
       >
         <div className="section-padding max-w-6xl mx-auto">
+          <div className="max-w-xl mx-auto mb-14 rounded-cloud border border-[#e4cf98]/55 bg-gradient-to-br from-[#fffdf9] via-white to-[#f2f8ff]/90 px-7 py-8 text-center shadow-cloud">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#976f2f] mb-3">
+              Official payment & enquiries
+            </p>
+            <p className="text-[#082040] text-sm sm:text-base">
+              <a
+                href={telHref()}
+                className="font-bold hover:text-sky-600 transition-colors"
+              >
+                {SITE_PHONE_DISPLAY}
+              </a>
+              <span className="mx-2 text-[#cbb98f]">·</span>
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-emerald-800 hover:underline"
+              >
+                WhatsApp
+              </a>
+            </p>
+            <div className="mt-5 pt-5 border-t border-[#efd9a9]/60 text-sm text-gray-700">
+              <p className="font-bold text-navy">{SITE_BANK_NAME}</p>
+              <p className="mt-1 font-medium">{SITE_BANK_ACCOUNT_NAME}</p>
+              <p className="font-mono font-bold tracking-wide mt-2 text-[#082040]">
+                {SITE_BANK_ACCOUNT_NUMBER_DISPLAY}
+              </p>
+              <p className="mt-3 text-xs text-gray-600">
+                Email:{' '}
+                <a
+                  href={`mailto:${SITE_EMAIL_DISPLAY}`}
+                  className="text-sky-700 font-medium hover:underline"
+                >
+                  {SITE_EMAIL_DISPLAY}
+                </a>
+              </p>
+            </div>
+          </div>
+
           {/* Newsletter */}
           <div className="text-center mb-16">
             <h3 className="heading-md text-navy mb-4">Stay Inspired</h3>
-            <p className="text-gray-500 mb-6 max-w-md mx-auto">
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
               Subscribe to receive updates about the book, events, and
               inspirational content.
             </p>
@@ -612,7 +559,7 @@ function App() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-full border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                className="flex-1 px-5 py-3 rounded-full border border-[#cbb98f]/50 bg-white text-navy placeholder:text-gray-500 focus:border-gold-500 focus:ring-2 focus:ring-gold-400/25 outline-none transition-all shadow-sm"
               />
               <button
                 type="submit"
@@ -624,7 +571,7 @@ function App() {
           </div>
 
           {/* Divider */}
-          <div className="w-full h-px bg-gray-100 mb-10" />
+          <div className="w-full h-px bg-gray-200 mb-10" />
 
           {/* Footer Links */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -640,25 +587,25 @@ function App() {
             <nav className="flex flex-wrap justify-center gap-6">
               <button
                 onClick={() => scrollToSection(heroRef)}
-                className="text-sm text-gray-600 hover:text-[#705822] transition-colors"
+                className="text-sm text-gray-600 hover:text-[#8b6f47] transition-colors"
               >
                 Home
               </button>
               <button
                 onClick={() => scrollToSection(bookRevealRef)}
-                className="text-sm text-gray-600 hover:text-[#705822] transition-colors"
+                className="text-sm text-gray-600 hover:text-[#8b6f47] transition-colors"
               >
                 About the Book
               </button>
               <button
                 onClick={() => scrollToSection(eventRef)}
-                className="text-sm text-gray-600 hover:text-[#705822] transition-colors"
+                className="text-sm text-gray-600 hover:text-[#8b6f47] transition-colors"
               >
                 Event
               </button>
               <button
                 onClick={() => scrollToSection(contactRef)}
-                className="text-sm text-gray-600 hover:text-[#705822] transition-colors"
+                className="text-sm text-gray-600 hover:text-[#8b6f47] transition-colors"
               >
                 Contact
               </button>
@@ -668,25 +615,25 @@ function App() {
             <div className="flex gap-4">
               <a
                 href="#"
-                className="w-10 h-10 bg-[#f4ecdb] rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
+                className="w-10 h-10 bg-navy/10 rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#f4ecdb] rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
+                className="w-10 h-10 bg-navy/10 rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#f4ecdb] rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
+                className="w-10 h-10 bg-navy/10 rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
               >
                 <Youtube className="w-5 h-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#f4ecdb] rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
+                className="w-10 h-10 bg-navy/10 rounded-full flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
               >
                 <Twitter className="w-5 h-5" />
               </a>
@@ -695,16 +642,16 @@ function App() {
 
           {/* Copyright */}
           <div className="text-center mt-10">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-500">
               © 2026 God First. All rights reserved. |{' '}
               <a
                 href="#"
-                className="hover:text-[#705822] transition-colors"
+                className="hover:text-[#8b6f47] transition-colors"
               >
                 Privacy Policy
               </a>
             </p>
-            <p className="text-xs text-gray-300 mt-2">
+            <p className="text-xs text-gray-400 mt-2">
               Esther Mike Otsabomhe Foundation
             </p>
           </div>

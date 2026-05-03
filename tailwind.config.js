@@ -57,9 +57,9 @@ module.exports = {
           600: '#B8860B',
         },
         navy: {
-          DEFAULT: '#0B0F19',
-          800: '#1a1f2e',
-          700: '#2d3548',
+          DEFAULT: '#071b3d',
+          800: '#0b2b58',
+          700: '#1d3f72',
         },
       },
       fontFamily: {
@@ -110,6 +110,20 @@ module.exports = {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        'fade-rise': {
+          from: {
+            opacity: '0',
+            transform: 'translate3d(0, 22px, 0)',
+          },
+          to: {
+            opacity: '1',
+            transform: 'translate3d(0, 0, 0)',
+          },
+        },
+        'slow-glimmer': {
+          '0%, 100%': { opacity: '0.35' },
+          '50%': { opacity: '0.7' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -119,6 +133,8 @@ module.exports = {
         'float-slow': 'float-slow 8s ease-in-out infinite',
         'pulse-soft': 'pulse-soft 4s ease-in-out infinite',
         shimmer: 'shimmer 3s linear infinite',
+        'fade-rise': 'fade-rise 0.95s cubic-bezier(0.2, 0.72, 0.15, 1) both',
+        'slow-glimmer': 'slow-glimmer 10s ease-in-out infinite',
       },
     },
   },

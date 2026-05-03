@@ -6,34 +6,34 @@
 
 @layer base {
   :root {
-    --background: 43 38% 96%;
-    --foreground: 220 40% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 6%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 6%;
-    --primary: 213 69% 20%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 38 35% 92%;
-    --secondary-foreground: 222 47% 6%;
-    --muted: 36 25% 93%;
-    --muted-foreground: 217 17% 38%;
-    --accent: 39 54% 45%;
-    --accent-foreground: 222 47% 6%;
+    --background: 216 76% 11%;
+    --foreground: 40 10% 98%;
+    --card: 217 29% 12%;
+    --card-foreground: 40 10% 98%;
+    --popover: 217 29% 12%;
+    --popover-foreground: 40 10% 98%;
+    --primary: 45 87% 53%;
+    --primary-foreground: 220 15% 10%;
+    --secondary: 212 95% 34%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 213 100% 18%;
+    --muted-foreground: 42 100% 92%;
+    --accent: 45 87% 53%;
+    --accent-foreground: 220 15% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 36 18% 82%;
-    --input: 36 18% 82%;
-    --ring: 211 58% 30%;
+    --border: 42 100% 65%;
+    --input: 217 29% 12%;
+    --ring: 45 87% 53%;
     --radius: 0.625rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 216 76% 11%;
+    --sidebar-foreground: 40 10% 98%;
+    --sidebar-primary: 40 10% 98%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 45 87% 53%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 45 87% 53%;
+    --sidebar-ring: 45 87% 53%;
   }
 }
 
@@ -47,20 +47,20 @@
   }
 
   body {
-    @apply text-navy font-sans antialiased;
-    background:
+    @apply font-sans antialiased text-navy overflow-x-hidden;
+    background-color: #f2f7fd;
+    background-image:
       radial-gradient(
-        circle at 20% 10%,
-        rgba(212, 175, 55, 0.12) 0%,
-        transparent 38%
+        ellipse 100% 60% at 50% -15%,
+        rgba(212, 175, 55, 0.22),
+        transparent 52%
       ),
       radial-gradient(
-        circle at 80% 0%,
-        rgba(37, 99, 235, 0.09) 0%,
-        transparent 42%
+        circle at 95% 5%,
+        rgba(59, 130, 246, 0.12),
+        transparent 36%
       ),
-      linear-gradient(180deg, #fcf8f0 0%, #f8f2e8 44%, #f6f8fb 100%);
-    overflow-x: hidden;
+      linear-gradient(180deg, #f8fbff 0%, #eef4fc 52%, #e6eef9 100%);
   }
 
   h1,
@@ -79,39 +79,39 @@
     @apply rounded-cloud border;
     background: linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.93),
-      rgba(255, 251, 244, 0.86)
+      rgba(7, 24, 62, 0.95),
+      rgba(13, 35, 76, 0.92)
     );
-    box-shadow: 0 20px 52px rgba(15, 23, 42, 0.08);
-    border-color: rgba(148, 130, 94, 0.24);
+    box-shadow: 0 20px 52px rgba(0, 0, 0, 0.24);
+    border-color: rgba(212, 175, 55, 0.24);
   }
 
   .cloud-card-lg {
     @apply rounded-cloud-lg border;
     background: linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.95),
-      rgba(255, 251, 244, 0.9)
+      rgba(9, 28, 61, 0.96),
+      rgba(13, 34, 72, 0.94)
     );
-    box-shadow: 0 26px 70px rgba(15, 23, 42, 0.11);
-    border-color: rgba(148, 130, 94, 0.26);
+    box-shadow: 0 26px 70px rgba(0, 0, 0, 0.25);
+    border-color: rgba(212, 175, 55, 0.26);
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-sky-500 to-sky-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-gold-300 via-gold-400 to-sky-500 bg-clip-text text-transparent;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 bg-navy text-white font-semibold rounded-full 
-           transition-all duration-300 hover:bg-navy/90 hover:scale-[1.02]
+    @apply inline-flex items-center justify-center px-8 py-4 bg-gold-400 text-[#081b3c] font-semibold rounded-full 
+           transition-all duration-300 hover:bg-gold-300 hover:scale-[1.02]
            active:scale-95;
-    box-shadow: 0 14px 35px rgba(11, 15, 25, 0.25);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center px-8 py-4 bg-transparent text-navy font-semibold rounded-full 
-           border-2 border-[#9a8759]/45 transition-all duration-300 
-           hover:bg-[#f5ecda] hover:text-navy hover:border-[#9a8759];
+    @apply inline-flex items-center justify-center px-8 py-4 bg-transparent text-gold-200 font-semibold rounded-full 
+           border-2 border-gold-400 transition-all duration-300 
+           hover:bg-gold-500/10 hover:text-white hover:border-gold-300;
   }
 
   .section-padding {

@@ -7,6 +7,14 @@ import {
   MapPin,
   Upload,
 } from 'lucide-react'
+import {
+  SITE_BANK_ACCOUNT_NAME,
+  SITE_BANK_ACCOUNT_NUMBER_DISPLAY,
+  SITE_BANK_ACCOUNT_NUMBER_RAW,
+  SITE_BANK_NAME,
+  SITE_PHONE_DISPLAY,
+  telHref,
+} from '@/lib/siteContact'
 
 const PICKUP_NOTICE =
   'See all approved pickup spots below and enter your preferred location.'
@@ -271,7 +279,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
       }
 
       setMessage(
-        'Order submitted successfully. Receipt has been sent to admin for verification.',
+        'Order submitted successfully! Your receipt has been sent to the admin for verification. We will contact you shortly.',
       )
       setReceiptFile(null)
     } catch (submitError) {
@@ -287,8 +295,9 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
 
   return (
     <section
+      id="order-payment"
       ref={sectionRef}
-      className="relative py-28 lg:py-36 overflow-hidden"
+      className="relative py-28 lg:py-36 overflow-hidden scroll-mt-[5.75rem] animate-fade-rise motion-reduce:animate-none motion-reduce:opacity-100"
     >
       <div className="payment-content section-padding max-w-5xl mx-auto">
         <div className="text-center mb-12">
@@ -319,7 +328,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-navy mb-4">
+            <label className="block text-sm font-medium text-gold-100/95 mb-4">
               Book Format *
             </label>
             <div className="grid md:grid-cols-2 gap-4">
@@ -363,7 +372,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
           <div className="grid md:grid-cols-2 gap-6">
             {bookFormat === 'hardcopy' && (
               <div>
-                <label className="block text-sm font-medium text-navy mb-2">
+                <label className="block text-sm font-medium text-gold-100/95 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -372,13 +381,13 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="Your full name"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-navy mb-2">
+              <label className="block text-sm font-medium text-gold-100/95 mb-2">
                 Email Address *
               </label>
               <input
@@ -387,7 +396,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                 required
               />
             </div>
@@ -396,7 +405,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
           {bookFormat === 'hardcopy' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-navy mb-2">
+                <label className="block text-sm font-medium text-gold-100/95 mb-2">
                   Phone Number *
                 </label>
                 <input
@@ -404,8 +413,8 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+234 XXX XXX XXXX"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                  placeholder="0803 051 9619"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                 />
               </div>
 
@@ -449,7 +458,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
               {requiresAddress && (
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">
+                    <label className="block text-sm font-medium text-gold-100/95 mb-2">
                       Delivery Address *
                     </label>
                     <input
@@ -458,11 +467,11 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       value={formData.address}
                       onChange={handleChange}
                       placeholder="House number, street"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">
+                    <label className="block text-sm font-medium text-gold-100/95 mb-2">
                       City / Area *
                     </label>
                     <input
@@ -471,11 +480,11 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       value={formData.city}
                       onChange={handleChange}
                       placeholder="City or LGA"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">
+                    <label className="block text-sm font-medium text-gold-100/95 mb-2">
                       State *
                     </label>
                     <input
@@ -484,11 +493,11 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       value={formData.state}
                       onChange={handleChange}
                       placeholder="State"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">
+                    <label className="block text-sm font-medium text-gold-100/95 mb-2">
                       Country *
                     </label>
                     <input
@@ -497,7 +506,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       value={formData.country}
                       onChange={handleChange}
                       placeholder="Country"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -505,7 +514,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
 
               {requiresPickup && (
                 <div>
-                  <label className="block text-sm font-medium text-navy mb-2">
+                  <label className="block text-sm font-medium text-gold-100/95 mb-2">
                     Preferred Pickup Spot *
                   </label>
                   <div className="relative">
@@ -516,7 +525,7 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                       onChange={handleChange}
                       onFocus={() => setShowPickupSuggestions(true)}
                       placeholder="Type to search pickup locations..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy placeholder:text-gray-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
                     />
                     {showPickupSuggestions &&
                       filteredPickupLocations.length > 0 && (
@@ -550,36 +559,42 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                         </div>
                       )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5" /> All pickup spots are
-                    listed below this section.
+                  <p className="text-xs text-sky-300/85 mt-2 flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 shrink-0" /> All pickup spots
+                    are listed below this section.
                   </p>
                 </div>
               )}
             </>
           )}
 
-          <div className="border-t border-[#dccaa2] pt-8">
-            <h3 className="heading-md text-navy mb-5">Payment Details</h3>
+          <div className="border-t border-white/15 pt-8">
+            <h3 className="heading-md text-white mb-5">Payment Details</h3>
             {requiresPayment && (
               <>
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
                   <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                    <p className="text-xs text-gray-500 mb-1">Account Name</p>
+                    <p className="text-xs text-gray-500 mb-1">Bank</p>
+                    <p className="font-semibold text-navy">{SITE_BANK_NAME}</p>
+                  </div>
+                  <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
+                    <p className="text-xs text-gray-500 mb-1">Account name</p>
                     <p className="font-mono font-medium text-navy">
-                      Esther Mike Otsabomhe
+                      {SITE_BANK_ACCOUNT_NAME}
                     </p>
                   </div>
 
-                  <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5]">
-                    <p className="text-xs text-gray-500 mb-1">Account Number</p>
-                    <div className="flex items-center justify-between">
-                      <p className="font-mono font-medium text-navy">
-                        1234567890
+                  <div className="p-4 bg-[#f9f4e8] rounded-xl border border-[#e4d6b5] md:col-span-1 md:col-start-auto">
+                    <p className="text-xs text-gray-500 mb-1">Account number</p>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="font-mono font-semibold text-navy tracking-wide">
+                        {SITE_BANK_ACCOUNT_NUMBER_DISPLAY}
                       </p>
                       <button
                         type="button"
-                        onClick={() => copyToClipboard('1234567890')}
+                        onClick={() =>
+                          copyToClipboard(SITE_BANK_ACCOUNT_NUMBER_RAW)
+                        }
                         className="ml-2 p-2 hover:bg-sky-200 rounded-lg transition-colors"
                         title="Copy account number"
                       >
@@ -592,6 +607,17 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                   </div>
                 </div>
 
+                <p className="text-sm text-sky-200/95 mb-4">
+                  Need help completing payment?{' '}
+                  <a
+                    href={telHref()}
+                    className="font-semibold text-gold-100 underline underline-offset-2 hover:text-white"
+                  >
+                    {SITE_PHONE_DISPLAY}
+                  </a>{' '}
+                  (call or WhatsApp from the homepage contact section).
+                </p>
+
                 <div className="p-6 bg-amber-50 rounded-xl border-l-4 border-amber-500 mb-6">
                   <div className="flex gap-3">
                     <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -600,15 +626,21 @@ export function PaymentSection({ onSectionRef }: PaymentSectionProps) {
                         Important
                       </h4>
                       <p className="text-sm text-amber-800">
-                        Make transfer to the account above, then upload your
-                        receipt.
+                        Make transfer to{' '}
+                        <span className="font-semibold">{SITE_BANK_NAME}</span>{' '}
+                        account{' '}
+                        <span className="font-mono font-semibold">
+                          {SITE_BANK_ACCOUNT_NUMBER_DISPLAY}
+                        </span>{' '}
+                        ({SITE_BANK_ACCOUNT_NAME}), then upload your receipt
+                        here.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-navy mb-3">
+                  <label className="block text-sm font-medium text-gold-100/95 mb-3">
                     Upload Payment Receipt *
                   </label>
                   <div

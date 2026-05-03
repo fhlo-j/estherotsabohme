@@ -99,12 +99,18 @@ nav.bg-white\/90 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0) 22%,
-    rgba(15, 23, 42, 0.02) 100%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 120% 40% at 50% 0%,
+      rgba(212, 175, 55, 0.14),
+      transparent 55%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(212, 175, 55, 0.1) 0%,
+      rgba(255, 255, 255, 0) 22%,
+      rgba(15, 61, 120, 0.08) 100%
+    );
   z-index: 0;
 }
 

@@ -8,6 +8,12 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
+  SITE_BANK_ACCOUNT_NAME,
+  SITE_BANK_ACCOUNT_NUMBER_DISPLAY,
+  SITE_BANK_NAME,
+  SITE_PHONE_DISPLAY,
+} from '@/lib/siteContact'
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -143,11 +149,28 @@ const bookshopLocations: LocationGroup[] = [
   },
 ]
 
-const contactInfo = [
-  { name: 'Esther', phone: '08061195076' },
+type PickupContact = {
+  name: string
+  phone: string
+  displayPhone?: string
+}
+
+const contactInfo: PickupContact[] = [
+  {
+    name: 'Esther Otsabomhe',
+    phone: '08030519619',
+    displayPhone: SITE_PHONE_DISPLAY,
+  },
   { name: 'Joy', phone: '07064271315' },
   { name: 'Shola', phone: '08035064115' },
 ]
+
+function whatsappHrefFromNgPhone(phone: string): string {
+  let d = phone.replace(/\D/g, '')
+  if (d.startsWith('0')) d = d.slice(1)
+  else if (d.startsWith('234')) d = d.slice(3)
+  return `https://wa.me/234${d}`
+}
 
 export function BookPickupLocations() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -172,17 +195,18 @@ export function BookPickupLocations() {
           .filter((group) => group.bookshops.length > 0)
 
   const handleCall = (phone: string) => {
-    window.location.href = `tel:${phone}`
+    window.location.href = `tel:${phone.replace(/\s/g, '')}`
   }
 
   const handleWhatsApp = (phone: string) => {
-    const cleanPhone = phone.replace(/\D/g, '')
-    const whatsappUrl = `https://wa.me/234${cleanPhone.slice(1)}`
-    window.open(whatsappUrl, '_blank')
+    window.open(whatsappHrefFromNgPhone(phone), '_blank')
   }
 
   return (
-    <section className="w-full bg-gradient-to-b from-slate-50 to-white py-16 md:py-24">
+    <section
+      id="pickup-locations"
+      className="w-full bg-gradient-to-b from-sky-50/90 via-white to-[#fdfbf7] py-16 md:py-24 scroll-mt-[5.25rem]"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
@@ -304,14 +328,27 @@ export function BookPickupLocations() {
         </div>
 
         {/* Contact Section */}
-        <Card className="border-2 border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50">
-          <CardHeader className="border-b border-amber-200">
-            <CardTitle className="text-2xl text-amber-900 flex items-center gap-2">
-              <Phone className="w-6 h-6 text-amber-600" />
+        <Card className="border-2 border-sky-200/80 bg-gradient-to-br from-sky-50 via-white to-amber-50/80 shadow-cloud">
+          <CardHeader className="border-b border-sky-200/70 bg-white/70">
+            <CardTitle className="text-2xl text-[#082040] flex items-center gap-2">
+              <Phone className="w-6 h-6 text-sky-600" />
               Need Help With Pickup?
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-8">
+            <div className="mb-8 rounded-xl border border-[#e4cf98]/65 bg-[#fdfbf7] p-5 text-center text-[#082040]">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#976f2f] mb-3">
+                Book payment (transfer)
+              </p>
+              <p className="font-semibold text-navy">{SITE_BANK_NAME}</p>
+              <p className="text-sm mt-2">
+                Account name:{' '}
+                <span className="font-mono font-semibold">{SITE_BANK_ACCOUNT_NAME}</span>
+              </p>
+              <p className="text-lg font-mono font-bold tracking-wide mt-2 text-[#082040]">
+                {SITE_BANK_ACCOUNT_NUMBER_DISPLAY}
+              </p>
+            </div>
             <p className="text-slate-700 mb-8">
               Reach out to any of our team members for pickup enquiries and
               assistance:
@@ -330,7 +367,7 @@ export function BookPickupLocations() {
                   <div className="space-y-3">
                     <Button
                       onClick={() => handleCall(contact.phone)}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+                      className="w-full bg-[#071b3d] hover:bg-[#0a275a] text-white flex items-center justify-center gap-2 ring-1 ring-[#d4af37]/35"
                     >
                       <Phone className="w-4 h-4" />
                       Call
@@ -344,8 +381,8 @@ export function BookPickupLocations() {
                       WhatsApp
                     </Button>
 
-                    <p className="text-center text-sm text-slate-600 font-mono">
-                      {contact.phone}
+                    <p className="text-center text-sm text-slate-600 font-mono tracking-wide">
+                      {contact.displayPhone ?? contact.phone}
                     </p>
                   </div>
                 </div>

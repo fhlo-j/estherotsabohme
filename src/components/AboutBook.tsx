@@ -62,8 +62,8 @@ export function AboutBook({ onSectionRef }: AboutBookProps) {
           <div className="space-y-8">
             {/* Summary */}
             <div className="cloud-card p-8">
-              <h3 className="heading-md text-navy mb-4">Summary</h3>
-              <p className="body-text text-gray-600">
+              <h3 className="heading-md text-white mb-4">Summary</h3>
+              <p className="body-text text-[#c8d6ea]">
                 God First is an inspiring journey about faith, determination,
                 and discovering your true purpose. This book explores how
                 placing God at the center of your life transforms every aspect
@@ -73,24 +73,24 @@ export function AboutBook({ onSectionRef }: AboutBookProps) {
 
             {/* Foundations */}
             <div className="cloud-card p-8">
-              <h3 className="heading-md text-navy mb-4">Foundations</h3>
-              <p className="body-text text-gray-600 mb-4">
+              <h3 className="heading-md text-white mb-4">Foundations</h3>
+              <p className="body-text text-[#c8d6ea] mb-4">
                 Understand the core principles that ground a faith-centered
                 life. This section explores the spiritual foundations necessary
                 for building a life of purpose, discipline, and unwavering
                 commitment to God's principles.
               </p>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-[#b8c9e0]">
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Building spiritual strength through faith</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Establishing godly principles as your foundation</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Developing moral clarity and conviction</span>
                 </li>
               </ul>
@@ -98,24 +98,26 @@ export function AboutBook({ onSectionRef }: AboutBookProps) {
 
             {/* Growth & Challenges */}
             <div className="cloud-card p-8">
-              <h3 className="heading-md text-navy mb-4">Growth & Challenges</h3>
-              <p className="body-text text-gray-600 mb-4">
+              <h3 className="heading-md text-white mb-4">
+                Growth & Challenges
+              </h3>
+              <p className="body-text text-[#c8d6ea] mb-4">
                 Discover how embracing challenges as growth opportunities shapes
                 your character. Learn from real-life experiences that
                 demonstrate the transformative power of perseverance and faith
                 through difficult seasons.
               </p>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-[#b8c9e0]">
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Navigating obstacles with faith</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Finding strength in adversity</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Personal transformation through challenges</span>
                 </li>
               </ul>
@@ -126,24 +128,26 @@ export function AboutBook({ onSectionRef }: AboutBookProps) {
           <div className="space-y-8">
             {/* Trust & Utilisation */}
             <div className="cloud-card p-8">
-              <h3 className="heading-md text-navy mb-4">Trust & Utilisation</h3>
-              <p className="body-text text-gray-600 mb-4">
+              <h3 className="heading-md text-white mb-4">
+                Trust & Utilisation
+              </h3>
+              <p className="body-text text-[#c8d6ea] mb-4">
                 Explore the power of placing complete trust in God's plan and
                 utilizing the gifts and resources He's given you. This section
                 examines how surrendering control while stewarding your talents
                 creates a powerful synergy for success.
               </p>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-[#b8c9e0]">
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Complete trust in divine guidance</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Maximizing your God-given talents</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Stewardship of responsibilities</span>
                 </li>
               </ul>
@@ -151,24 +155,26 @@ export function AboutBook({ onSectionRef }: AboutBookProps) {
 
             {/* Fulfilment & Legacy */}
             <div className="cloud-card p-8">
-              <h3 className="heading-md text-navy mb-4">Fulfilment & Legacy</h3>
-              <p className="body-text text-gray-600 mb-4">
+              <h3 className="heading-md text-white mb-4">
+                Fulfilment & Legacy
+              </h3>
+              <p className="body-text text-[#c8d6ea] mb-4">
                 Understand what true fulfillment looks like when it's rooted in
                 purpose and faith. Learn how your choices today create a legacy
                 of impact that extends far beyond your lifetime, inspiring
                 generations to come.
               </p>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-[#b8c9e0]">
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Discovering lasting fulfillment</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Creating positive generational impact</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-sky-500 mt-1">•</span>
+                  <span className="text-sky-400 mt-1">•</span>
                   <span>Living a purposeful, meaningful life</span>
                 </li>
               </ul>
