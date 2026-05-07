@@ -33,7 +33,7 @@ export function BookShowcase({ onSectionRef }: BookShowcaseProps) {
             <div className="relative w-full max-w-5xl md:max-w-6xl mb-6">
               <div className="aspect-[3/2] rounded-2xl overflow-hidden shadow-cloud-lg ring-1 ring-[#cbb98f]/50 bg-[#f7f2e8]">
                 <img
-                  src="/images/Cover.jpg"
+                  src="/images/Cover.png"
                   alt="God First book cover"
                   className="w-full h-full object-cover"
                   loading="eager"
